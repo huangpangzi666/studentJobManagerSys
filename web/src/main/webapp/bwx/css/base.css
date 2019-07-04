@@ -1,0 +1,276 @@
+html,body {
+	height: 100% !important;
+	max-height: 100% !important;
+	min-width: 1280px !important;
+}
+html.open-area-width, html.open-area-width body {
+	min-width: auto !important;
+}
+
+/**
+    页面居中的代码 和使用的demo
+**/
+.content-center {
+    width: 100%;
+    height: auto;
+    margin: 0 auto; /*水平居中*/
+    position: absolute;
+    top: 50%; /*偏移*/
+    transform: translateY(-50%);
+    left: 0;
+}
+.demo p:first-child {
+    text-align: center !important;
+    font-family: cursive;
+    font-size: 150px;
+    font-weight: bold;
+    line-height: 100px;
+    letter-spacing: 5px;
+    color: #fff;
+}
+
+.demo p:first-child span {
+    cursor: pointer;
+    text-shadow: 0px 0px 2px #686868, 0px 1px 1px #ddd, 0px 2px 1px #d6d6d6,
+        0px 3px 1px #ccc, 0px 4px 1px #c5c5c5, 0px 5px 1px #c1c1c1, 0px 6px
+        1px #bbb, 0px 7px 1px #777, 0px 8px 3px rgba(100, 100, 100, 0.4), 0px
+        9px 5px rgba(100, 100, 100, 0.1), 0px 10px 7px
+        rgba(100, 100, 100, 0.15), 0px 11px 9px rgba(100, 100, 100, 0.2), 0px
+        12px 11px rgba(100, 100, 100, 0.25), 0px 13px 15px
+        rgba(100, 100, 100, 0.3);
+    -webkit-transition: all .1s linear;
+    transition: all .1s linear;
+}
+
+.demo p:first-child span:hover {
+    text-shadow: 0px 0px 2px #686868, 0px 1px 1px #fff, 0px 2px 1px #fff,
+        0px 3px 1px #fff, 0px 4px 1px #fff, 0px 5px 1px #fff, 0px 6px 1px #fff,
+        0px 7px 1px #777, 0px 8px 3px #fff, 0px 9px 5px #fff, 0px 10px 7px
+        #fff, 0px 11px 9px #fff, 0px 12px 11px #fff, 0px 13px 15px #fff;
+    -webkit-transition: all .1s linear;
+    transition: all .1s linear;
+}
+
+.demo p:not(:first-child ) {
+    text-align: center;
+    color: #666;
+    font-family: cursive;
+    font-size: 20px;
+    text-shadow: 0 1px 0 #fff;
+    letter-spacing: 1px;
+    line-height: 2em;
+    margin-top: 50px;
+}
+/*
+ * 侧栏
+ * */
+.side {
+	position: fixed;
+	height: 100%;
+	min-height: 800px !important;
+	width: 300px;
+  box-shadow: 0 0 15px #888;
+  z-index: 999;
+}
+
+.side .overlay {
+	height: 180px;
+	background-color: #000;
+	position: absolute;
+	opacity: .7;
+	width: 100%;
+}
+
+.side .avatar {
+	display: block;
+	border: 5px solid #fff;
+	border-radius: 50%;
+	width: auto;
+    height: auto;
+    max-width: 128px;
+    max-height: 128px;
+	margin: 0 auto;
+	transition: all .1s ease-in;
+}
+
+.side .content {
+	width: 76%;
+	text-align: center;
+	margin: 112px auto 0;
+	position: relative;
+	z-index: 1;
+}
+/*
+ * 主体内容
+ * */
+.main {
+	right: 0;
+	min-height: 100%;
+	background: #fff;
+	left: 300px;
+	width: auto;
+	position: absolute;
+  padding: 0 40px 0 40px;
+  min-width: 980px !important;
+}
+/**
+ * 使内容居中显示
+ */
+.center-top {
+    padding-top: 80px;
+    min-width: 760px;
+}
+/*
+ * 通用样式
+ * */
+.overflow {
+	overflow: hidden;
+}
+.defaultbackgroundcolor {
+	background-color: #fff !important;
+}
+/* 下拉菜单最大高度*/
+.dropdown-menu-height {
+    max-height: 320px !important; 
+    overflow-y: scroll;
+}
+/* 清除 float：left
+.clearfloat {
+	float: none !important;
+}*/
+/* 距离 */
+.margin-left-5 {
+	margin-left: 5px;
+}
+.margin-bottom-0 {
+	margin-bottom: 0 !important;
+}
+.list-div {
+	display: block;
+}
+.list-div > button {
+	float: none !important;
+}
+/* input 组件*/
+.form-item {
+  margin: 10px 0 0 0;
+}
+.form-item button {
+  border-radius: 24px !important;
+}
+.form-item input, .form-item select, .form-item option {
+  border-radius: 24px !important;
+  text-indent: 2em;
+}
+.form-item span {
+  top: 36px !important;
+  left: 24px;
+  font-size: 16px;
+}
+/* 圆角 */
+.radius {
+  border-radius: 24px !important;
+}
+/**
+ * 列表项
+ */
+article {
+    margin: 30px;
+    border: 1px solid #ddd;
+    background: #fff;
+    position: relative;
+    transition: all .2s ease-in;
+    visibility: hidden;
+}
+article.show {
+    -webkit-animation: bounce .6s;
+    animation: bounce .6s;
+}
+article header {
+    border-left: 5px solid;
+    padding: 15px 30px 15px 25px;
+}
+article header h2 {
+    margin: 0;
+    font-size: 26px;
+    padding-right: 110px;
+}
+article header time {
+    font-size: 14px;
+    position: absolute;
+    right: 30px;
+    color: #aaa;
+    top: 18px;
+}
+article footer {
+    padding: 20px 35px 0 0;
+    margin: 30px 30px 20px;
+    border-top: 1px solid #ddd;
+}
+.tags .tag {
+    color: #fff;
+    font-size: 12px;
+    height: 18px;
+    line-height: 18px;
+    display: inline-block;
+    padding: 0 5px 0 10px;
+    position: relative;
+    border-radius: 5px;
+    margin: 5px 9px 5px 8px;
+    background-color: #7b5d5f;
+}
+.tags .avatar {
+    width: 20px;
+    border-radius: 10px;
+    right: 30px;
+    position: absolute;
+    bottom: 25px;
+    transition: all .2s ease-out 0s;
+}
+.tags .avatar:hover {
+    transform: rotate(360deg);
+    color: #333;
+}
+article .abstract {
+    line-height: 1.8em;
+    padding-right: 30px;
+    padding-left: 30px;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+article.post, article.show {
+    visibility: visible;
+}
+/* end */
+
+/**
+ * 特殊的格式-登录、注册、忘记密码页面的布局
+ */
+#top_logo {
+  background-color: #F9F9F9;
+  page-break-before: auto;
+  page-break-after: auto;
+  cursor: auto;
+  background-size: cover;
+  box-sizing: border-box;
+  min-width: 780px;
+  opacity: 0.93;
+}
+#top_logo form {
+  width: 720px;
+  height: 100%;
+  margin: 0 auto !important;
+  padding: 40px 80px 90px 80px;
+  background-color: #fff;
+  border-radius: 10px;
+}
+/*
+用于 a 标签右对齐排列
+*/
+.list-a a {
+  display: block;
+  float: right;
+  margin-left: 16px;
+  margin-top: 12px;
+  margin-bottom: 24px;
+}

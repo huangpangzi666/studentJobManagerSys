@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.submit.mapper.TTeachingLessionMapper" >
+    <cache-ref namespace="com.submit.mapper.TLessionMapper"/>
+  <resultMap id="BaseResultMap" type="com.submit.entity.TTeachingLession" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="class_id" property="classId" jdbcType="VARCHAR" />
+    <result column="lession_id" property="lessionId" jdbcType="VARCHAR" />
+    <result column="teacher_id" property="teacherId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="BIT" />
+    <association property="lessionName" column="lession_id" select="com.submit.mapper.TLessionMapper.selectNameById" javaType="java.lang.String" />
+    <association property="className" column="class_id" select="com.submit.mapper.TClassMapper.selectNameById" javaType="java.lang.String" />
+    <association property="teacherName" column="teacher_id" select="com.submit.mapper.TTeacherMapper.selectNameById" javaType="java.lang.String" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, class_id, lession_id, teacher_id, status
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.submit.entity.TTeachingLessionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_teaching_lession
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_teaching_lession
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_teaching_lession
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.submit.entity.TTeachingLessionExample" >
+    delete from t_teaching_lession
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.submit.entity.TTeachingLession" >
+    insert into t_teaching_lession (id, class_id, lession_id, 
+      teacher_id, status, gmt_create, 
+      gmt_modified)
+    values (#{id,jdbcType=VARCHAR}, #{classId,jdbcType=VARCHAR}, #{lessionId,jdbcType=VARCHAR}, 
+      #{teacherId,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.submit.entity.TTeachingLession" >
+    insert into t_teaching_lession
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="classId != null" >
+        class_id,
+      </if>
+      <if test="lessionId != null" >
+        lession_id,
+      </if>
+      <if test="teacherId != null" >
+        teacher_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="classId != null" >
+        #{classId,jdbcType=VARCHAR},
+      </if>
+      <if test="lessionId != null" >
+        #{lessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherId != null" >
+        #{teacherId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.submit.entity.TTeachingLessionExample" resultType="java.lang.Integer" >
+    select count(*) from t_teaching_lession
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_teaching_lession
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classId != null" >
+        class_id = #{record.classId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lessionId != null" >
+        lession_id = #{record.lessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.teacherId != null" >
+        teacher_id = #{record.teacherId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=BIT},
+      </if>
+      <if test="record.gmtCreate != null" >
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null" >
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_teaching_lession
+    set id = #{record.id,jdbcType=VARCHAR},
+      class_id = #{record.classId,jdbcType=VARCHAR},
+      lession_id = #{record.lessionId,jdbcType=VARCHAR},
+      teacher_id = #{record.teacherId,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=BIT},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.submit.entity.TTeachingLession" >
+    update t_teaching_lession
+    <set >
+      <if test="classId != null" >
+        class_id = #{classId,jdbcType=VARCHAR},
+      </if>
+      <if test="lessionId != null" >
+        lession_id = #{lessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherId != null" >
+        teacher_id = #{teacherId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.submit.entity.TTeachingLession" >
+    update t_teaching_lession
+    set class_id = #{classId,jdbcType=VARCHAR},
+      lession_id = #{lessionId,jdbcType=VARCHAR},
+      teacher_id = #{teacherId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=BIT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <!--  -->
+  <select id="selectPageByConditional" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List"></include>
+    from t_teaching_lession
+    <where>
+        <if test="status==true">
+            status = 1
+        </if>
+        <if test="status!=true">
+            status = 0
+        </if>
+        <if test="teacherId != null">
+            and teacher_id = #{teacherId}
+        </if>
+        <if test="classId != null">
+            and class_id = #{classId}
+        </if>
+    </where>
+    <if test="pageNo != null">
+     limit #{pageNo}, #{pageSize}
+    </if>
+  </select>
+  <select id="countByConditional" resultType="java.lang.Integer">
+    select count(1)
+    from t_teaching_lession
+    <where>
+        <if test="status==true">
+            status = 1
+        </if>
+        <if test="status!=true">
+            status = 0
+        </if>
+        <if test="teacherId != null">
+            and teacher_id = #{teacherId}
+        </if>
+        <if test="classId != null">
+            and class_id = #{classId}
+        </if>
+    </where>
+  </select>
+  <select id="getClassIdById" resultType="java.lang.String">
+    select class_id from t_teaching_lession where id = #{value}
+  </select>
+</mapper>

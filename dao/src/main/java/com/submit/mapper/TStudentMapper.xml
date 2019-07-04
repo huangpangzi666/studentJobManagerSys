@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.submit.mapper.TStudentMapper" >
+<cache-ref namespace="com.submit.mapper.TLoginMapper"/>
+  <resultMap id="BaseResultMap" type="com.submit.entity.TStudent" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="CHAR" />
+    <result column="sex" property="sex" jdbcType="BIT" />
+    <result column="headshot" property="headshot" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="class_id" property="classId" jdbcType="VARCHAR" />
+    <association property="className" column="class_id" javaType="java.lang.String" select="com.submit.mapper.TClassMapper.selectNameById" />
+    <association property="login" javaType="com.submit.entity.TLogin" select="com.submit.mapper.TLoginMapper.selectByUserId" column="id"></association>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, phone, sex, headshot, class_id, email
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.submit.entity.TStudentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_student
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_student
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.submit.entity.TStudentExample" >
+    delete from t_student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.submit.entity.TStudent" useGeneratedKeys="true" keyProperty="id">
+    insert into t_student (id, name, phone, 
+      sex, headshot, class_id,
+      gmt_create, gmt_modified, email)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=CHAR}, 
+      #{sex,jdbcType=BIT}, #{headshot,jdbcType=VARCHAR}, #{classId,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{email,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.submit.entity.TStudent" >
+    insert into t_student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="headshot != null" >
+        headshot,
+      </if>
+      <if test="classId != null" >
+        class_id,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=CHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=BIT},
+      </if>
+      <if test="headshot != null" >
+        #{headshot,jdbcType=VARCHAR},
+      </if>
+      <if test="classId != null" >
+        #{classId,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="email != null" >
+       #{email,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.submit.entity.TStudentExample" resultType="java.lang.Integer" >
+    select count(*) from t_student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_student
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=CHAR},
+      </if>
+      <if test="record.sex != null" >
+        sex = #{record.sex,jdbcType=BIT},
+      </if>
+      <if test="record.headshot != null" >
+        headshot = #{record.headshot,jdbcType=VARCHAR},
+      </if>
+      <if test="record.classId != null" >
+        class_id = #{record.classId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtCreate != null" >
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null" >
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.email != null" >
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_student
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=CHAR},
+      sex = #{record.sex,jdbcType=BIT},
+      headshot = #{record.headshot,jdbcType=VARCHAR},
+      class_id = #{record.classId,jdbcType=VARCHAR},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      email = #{record.email,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.submit.entity.TStudent" >
+    update t_student
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=CHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=BIT},
+      </if>
+      <if test="headshot != null" >
+        headshot = #{headshot,jdbcType=VARCHAR},
+      </if>
+      <if test="classId != null" >
+        class_id = #{classId,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.submit.entity.TStudent" >
+    update t_student
+    set name = #{name,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=CHAR},
+      sex = #{sex,jdbcType=BIT},
+      headshot = #{headshot,jdbcType=VARCHAR},
+      class_id = #{classId,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      email = #{email,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectPageByConditional" resultMap="BaseResultMap">
+    select 
+    <if test="column == null">
+	    <include refid="Base_Column_List" />
+    </if>
+    <if test="column != null">
+        <foreach collection="column" separator="," item="item">
+           ${item}
+        </foreach>
+    </if>
+    from t_student s
+    <where>
+        <if test="cId != null">
+            s.class_id = #{cId}
+        </if>
+        <if test="mId != null">
+            s.class_id in (select id from t_class where major_id = #{mId})
+        </if>
+        <if test="fId != null">
+            s.class_id in (select id from t_class c where c.major_id in (select id from t_major where t_major.faculty_id = #{fId}))
+        </if>
+        <if test="name != null">
+            and s.name like concat('%', #{name}, '%')
+        </if>
+    </where>
+    <if test="pageSize != 0">
+     limit #{pageNo}, #{pageSize}
+    </if>
+  </select>
+  <select id="countByConditional" resultType="java.lang.Integer">
+    select count(1) from t_student s
+     <where>
+        <if test="cId != null">
+            s.class_id = #{cId}
+        </if>
+        <if test="mId != null">
+           s.class_id in (select id from t_class where major_id = #{mId})
+        </if>
+        <if test="fId != null">
+            s.class_id in (select id from t_class c where c.major_id in (select id from t_major where t_major.faculty_id = #{fId}))
+        </if>
+        <if test="name != null">
+            and s.name like concat('%',#{name},'%') 
+        </if>
+    </where>
+  </select>
+  <select id="getInfoById" resultMap="BaseResultMap">
+    select name, sex, phone, headshot, email
+    from t_student
+    where id = #{user_id}
+  </select>
+  <select id="validEmailExist" resultType="java.lang.Integer">
+    select count(1) from t_student
+    where email = #{value}
+  </select>
+  <select id="getNameById" resultType="java.lang.String">
+    select name from t_student where id = #{student_id}
+  </select>
+</mapper>

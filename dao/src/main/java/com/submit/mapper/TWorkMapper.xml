@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.submit.mapper.TWorkMapper" >
+<cache type="org.mybatis.caches.ehcache.EhcacheCache" 
+        eviction="FIFO" flushInterval="60000" size="512" readOnly="false">
+        <property name="timeToIdleSeconds" value="3600" /><!--1 hour -->
+        <property name="timeToLiveSeconds" value="3600" /><!--1 hour -->
+        <property name="maxEntriesLocalHeap" value="1000" />
+        <property name="maxEntriesLocalDisk" value="10000000" />
+        <property name="memoryStoreEvictionPolicy" value="LRU" />
+    </cache>
+  <resultMap id="BaseResultMap" type="com.submit.entity.TWork" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="teacher_id" property="teacherId" jdbcType="INTEGER" />
+    <result column="acceptance_time" property="acceptanceTime" jdbcType="TIMESTAMP" />
+    <result column="teaching_lession_id" property="teachingLessionId" jdbcType="VARCHAR" />
+    <result column="annex" property="annex" jdbcType="VARCHAR" />
+     <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <association property="className"  column="teaching_lession_id"  javaType="java.lang.String" select="com.submit.mapper.TClassMapper.selectNameByTeachingLessionId" fetchType="lazy"></association>
+    <association property="lessionName" column="teaching_lession_id" javaType="java.lang.String" select="com.submit.mapper.TLessionMapper.selectNameByTeachingLessionId" />
+    <association property="teacherName" column="teaching_lession_id" javaType="java.lang.String" select="com.submit.mapper.TLessionMapper.selectTeacherNameByTeachingLessionId" fetchType="lazy"/>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.submit.entity.TWork" extends="BaseResultMap" >
+    <result column="demand" property="demand" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, teacher_id, acceptance_time, teaching_lession_id, annex, gmt_create, status
+  </sql>
+  <sql id="Blob_Column_List" >
+    demand
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.submit.entity.TWorkExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_work
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.submit.entity.TWorkExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_work
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_work
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_work
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.submit.entity.TWorkExample" >
+    delete from t_work
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.submit.entity.TWork" >
+    insert into t_work (id, name, teacher_id, 
+      acceptance_time, teaching_lession_id, annex, 
+      gmt_create, gmt_modified, status, 
+      demand)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{teacherId,jdbcType=INTEGER}, 
+      #{acceptanceTime,jdbcType=TIMESTAMP}, #{teachingLessionId,jdbcType=VARCHAR}, #{annex,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{demand,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.submit.entity.TWork" >
+    insert into t_work
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="teacherId != null" >
+        teacher_id,
+      </if>
+      <if test="acceptanceTime != null" >
+        acceptance_time,
+      </if>
+      <if test="teachingLessionId != null" >
+        teaching_lession_id,
+      </if>
+      <if test="annex != null" >
+        annex,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="demand != null" >
+        demand,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherId != null" >
+        #{teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="acceptanceTime != null" >
+        #{acceptanceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="teachingLessionId != null" >
+        #{teachingLessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="annex != null" >
+        #{annex,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="demand != null" >
+        #{demand,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.submit.entity.TWorkExample" resultType="java.lang.Integer" >
+    select count(*) from t_work
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_work
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.teacherId != null" >
+        teacher_id = #{record.teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="record.acceptanceTime != null" >
+        acceptance_time = #{record.acceptanceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.teachingLessionId != null" >
+        teaching_lession_id = #{record.teachingLessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.annex != null" >
+        annex = #{record.annex,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtCreate != null" >
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null" >
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.demand != null" >
+        demand = #{record.demand,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update t_work
+    set id = #{record.id,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      teacher_id = #{record.teacherId,jdbcType=INTEGER},
+      acceptance_time = #{record.acceptanceTime,jdbcType=TIMESTAMP},
+      teaching_lession_id = #{record.teachingLessionId,jdbcType=VARCHAR},
+      annex = #{record.annex,jdbcType=VARCHAR},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=INTEGER},
+      demand = #{record.demand,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_work
+    set id = #{record.id,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      teacher_id = #{record.teacherId,jdbcType=INTEGER},
+      acceptance_time = #{record.acceptanceTime,jdbcType=TIMESTAMP},
+      teaching_lession_id = #{record.teachingLessionId,jdbcType=VARCHAR},
+      annex = #{record.annex,jdbcType=VARCHAR},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.submit.entity.TWork" >
+    update t_work
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherId != null" >
+        teacher_id = #{teacherId,jdbcType=INTEGER},
+      </if>
+      <if test="acceptanceTime != null" >
+        acceptance_time = #{acceptanceTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="teachingLessionId != null" >
+        teaching_lession_id = #{teachingLessionId,jdbcType=VARCHAR},
+      </if>
+      <if test="annex != null" >
+        annex = #{annex,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="demand != null" >
+        demand = #{demand,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.submit.entity.TWork" >
+    update t_work
+    set name = #{name,jdbcType=VARCHAR},
+      teacher_id = #{teacherId,jdbcType=INTEGER},
+      acceptance_time = #{acceptanceTime,jdbcType=TIMESTAMP},
+      teaching_lession_id = #{teachingLessionId,jdbcType=VARCHAR},
+      annex = #{annex,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      demand = #{demand,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.submit.entity.TWork" >
+    update t_work
+    set name = #{name,jdbcType=VARCHAR},
+      teacher_id = #{teacherId,jdbcType=INTEGER},
+      acceptance_time = #{acceptanceTime,jdbcType=TIMESTAMP},
+      teaching_lession_id = #{teachingLessionId,jdbcType=VARCHAR},
+      annex = #{annex,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectPageByConditional" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+     <if test="sid != null">
+        from t_work, (select work_id from t_homework where student_id = #{sid}) temp
+     </if>
+     <if test="sid == null">
+        from t_work
+     </if>
+     <where>
+          <if test="tid != null">
+              teacher_id = #{tid}
+         </if>
+         <if test="sid != null">
+            work_id = t_work.id
+         </if>
+         <if test="status == 0">
+		       and 1=1 order by gmt_create desc
+		   </if>
+		   <if test="status == 1">
+		       and status = 0 order by gmt_create desc
+		   </if>
+		   <if test="status == 2">
+		       and status = 0 order by acceptance_time
+		   </if>
+		   <if test="status == 3">
+		       and status = 1 order by gmt_create desc
+		   </if>
+		   <if test="status == 4">
+		       and status = 2 order by gmt_create desc
+		   </if>
+     </where>
+    limit #{pageNo}, #{pageSize}
+  </select>
+  <select id="countByConditional" resultType="java.lang.Integer">
+     select count(1) 
+     <if test="sid != null">
+        from t_work, (select work_id from t_homework where student_id = #{sid}) temp
+     </if>
+     <if test="sid == null">
+        from t_work
+     </if>
+     <where>
+         <if test="tid != null">
+           teacher_id = #{tid}
+         </if>
+         <if test="sid != null">
+           work_id = t_work.id
+         </if>
+	    <if test="status == 2 || status == 1">
+	       and status = 0
+	    </if>
+	    <if test="status == 3">
+	        and status = 1
+	    </if>
+	    <if test="status == 4">
+               and status = 2 
+           </if>
+     </where>
+  </select>
+  <select id="isFinishedWork" resultType="java.lang.Integer">
+    select status from t_work where id = #{value}
+  </select>
+  <select id="isOwnWork" resultType="java.lang.Integer">
+    select count(1) from t_work
+    where id = #{workId} and teacher_id = #{userId} 
+  </select>
+  <select id="selectByHomeworkId" resultType="com.submit.entity.TWork">
+    select 
+    <include refid="Base_Column_List" />
+    from t_work
+    where t_work.id = (select work_id from t_homework where id = #{value})
+  </select>
+</mapper>

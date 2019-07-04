@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.submit.mapper.TClassMapper" >
+    <cache-ref namespace="com.submit.mapper.TLessionMapper"/>
+  <resultMap id="BaseResultMap" type="com.submit.entity.TClass" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="major_id" property="majorId" jdbcType="INTEGER" />
+    <result column="year" property="year" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="BaseResultMap2" type="com.submit.entity.TClass" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- 使用返回包装类型 -->
+  <resultMap id="VOResultMap" type="com.submit.vo.ClassVO" >
+    <id column="cid" property="cid" jdbcType="VARCHAR" />
+    <result column="mname" property="mName" jdbcType="VARCHAR" />
+    <result column="fid" property="fid" jdbcType="INTEGER" />
+    <result column="fname" property="fName" jdbcType="VARCHAR" />
+    <association  property="cls" javaType="com.submit.entity.TClass">
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="major_id" property="majorId" jdbcType="INTEGER" />
+	    <result column="year" property="year" jdbcType="INTEGER" />
+    </association >
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name, major_id, gmt_create, gmt_modified, year
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.submit.entity.TClassExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_class
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_class
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from t_class
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.submit.entity.TClassExample" >
+    delete from t_class
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.submit.entity.TClass" >
+    insert into t_class (id, name, major_id, 
+      gmt_create, gmt_modified, year
+      )
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{majorId,jdbcType=INTEGER}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{year,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.submit.entity.TClass" >
+    insert into t_class
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="majorId != null" >
+        major_id,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="majorId != null" >
+        #{majorId,jdbcType=INTEGER},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.submit.entity.TClassExample" resultType="java.lang.Integer" >
+    select count(*) from t_class
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_class
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.majorId != null" >
+        major_id = #{record.majorId,jdbcType=INTEGER},
+      </if>
+      <if test="record.gmtCreate != null" >
+        gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null" >
+        gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.year != null" >
+        year = #{record.year,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_class
+    set id = #{record.id,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      major_id = #{record.majorId,jdbcType=INTEGER},
+      gmt_create = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{record.gmtModified,jdbcType=TIMESTAMP},
+      year = #{record.year,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.submit.entity.TClass" >
+    update t_class
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="majorId != null" >
+        major_id = #{majorId,jdbcType=INTEGER},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="year != null" >
+        year = #{year,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.submit.entity.TClass" >
+    update t_class
+    set name = #{name,jdbcType=VARCHAR},
+      major_id = #{majorId,jdbcType=INTEGER},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      year = #{year,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 手动编写的代码 -->
+  
+ <!-- 基本查询包装对象sql片段 -->
+ <sql id="baseQueryVO">
+    select  
+    m.name as mname,
+    f.id as fid, 
+    f.name as fname,
+    c.id as cid,
+    c.name as name,
+    c.major_id as major_id,
+    c.year as year
+    from t_class c left outer join t_major m on c.major_id = m.id  left outer join t_faculty f on m.faculty_id = f.id 
+ </sql>
+  <select id="selectPage" resultMap="VOResultMap">
+    <include refid="baseQueryVO" />
+	<where>
+	  <if test="fid != null" >
+       f.id = #{fid}
+      </if>
+	  <if test="mid != null" >
+       and m.id = #{mid}
+      </if>
+	</where>
+    limit #{pageNo},#{pageSize}
+  </select>
+  <select id="count" resultType="java.lang.Integer">
+    select count(1)
+    from t_class c
+    <if test="fid != null and mid != null">
+	     left outer join t_major m on c.major_id = m.id
+         left outer join t_faculty f on m.faculty_id = f.id
+	     where c.major_id = #{mid} and f.id = #{fid}
+    </if>
+    <if test="fid != null and mid == null">
+        where c.major_id in (select m.id from t_major m left outer join t_faculty f on m.faculty_id = f.id where f.id = #{fid})
+    </if>
+  </select>
+  
+  <select id="getClassVOById" resultMap="VOResultMap">
+    <include refid="baseQueryVO" />
+    <where>
+        c.id = #{value}
+    </where>
+  </select>
+  <select id="selectNameById" resultType="java.lang.String">
+    select concat(year, name) as name from t_class where id = #{id}
+  </select>
+  <select id="getBaseInfoListByMajorId" resultMap="BaseResultMap">
+    select id, name, year from t_class where major_id = #{value}
+  </select>
+  <select id="getBaseInfoListOrderYear" resultMap="BaseResultMap2">
+    select id, concat(year, name) as name
+    from t_class
+    order by year desc
+  </select>
+  <select id="selectIdByNameAndYear" resultType="java.lang.String">
+    select id from t_class where year = #{year} and name = #{name}
+  </select>
+  <select id="selectNameByTeachingLessionId" resultType="java.lang.String">
+    select concat(year, name) as name from t_class
+    where id = (select class_id from t_teaching_lession where id = #{teaching_lession_id})
+  </select>
+</mapper>

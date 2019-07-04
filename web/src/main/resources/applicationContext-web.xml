@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd ">
+
+	<!-- 扫描基本包 -->
+	<context:component-scan
+		base-package="com.submit"></context:component-scan>
+
+	<!-- DB -->
+	<context:property-placeholder
+		location="classpath:db.properties" />
+		
+	<bean id="dataSource"
+		class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="${jdbc.user}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+        <property name="url" value="${jdbc.jdbcUrl}"></property>
+        <property name="driverClassName" value="${jdbc.driverClass}"></property>
+        <property name="filters" value="${jdbc.filters}"></property>
+	</bean>
+	
+	<bean id="SpringApplicationContext" class="com.submit.util.ApplicationContextHelper"></bean>
+	
+	<!-- sqlSession -->
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean">
+	   <property name="configLocation" value="classpath:sqlMapConfig.xml"></property>
+	   <property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<!-- 扫描mapper文件 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	   <property name="basePackage" value="com.submit.mapper"></property>
+	</bean>
+	<!-- 事务 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	   <property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+    
+     <!-- 验证码配置（也可以做web.xml的Servlet中配置），对应CaptchaRandomCodeController管理生成 -->  
+    <bean id="captchaProducer" class="com.google.code.kaptcha.impl.DefaultKaptcha">  
+        <property name="config">  
+            <bean class="com.google.code.kaptcha.util.Config">  
+                <constructor-arg>  
+                    <props>  
+                        <prop key="kaptcha.border">yes</prop>  
+                        <prop key="kaptcha.border.color">105,179,90</prop>  
+                        <prop key="kaptcha.image.width">101</prop>  
+                        <prop key="kaptcha.image.height">38</prop>  
+                        <prop key="kaptcha.session.key">code</prop>  
+                        <prop key="kaptcha.textproducer.font.color">red</prop>  
+                        <prop key="kaptcha.textproducer.font.size">35</prop>  
+                        <prop key="kaptcha.textproducer.char.space">3</prop>  
+                        <prop key="kaptcha.textproducer.char.length">4</prop>  
+                        <!-- 配置中文 <prop key="kaptcha.textproducer.impl">com.google.code.kaptcha.text.impl.ChineseTextProducer</prop> -->  
+                        <prop key="kaptcha.textproducer.font.names">彩云,宋体,楷体,微软雅黑</prop>  
+                    </props>  
+                </constructor-arg>  
+            </bean>  
+        </property>  
+    </bean>
+</beans>
