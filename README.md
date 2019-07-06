@@ -23,8 +23,7 @@
 
 
 
-
-由于没有在IT公司呆过，还是学生，所以敲得代码也就那样了。但也不会就此止步，第二版在重构中，采用更为规范健壮的编码方式（<https://gitee.com/wx_com/jobmanager>）。
+第二版在重构中，采用更为规范健壮的编码方式（<https://gitee.com/wx_com/jobmanager>）。
 
 
 
